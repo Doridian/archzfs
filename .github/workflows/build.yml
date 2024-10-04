@@ -1,0 +1,23 @@
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+name: Build
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build builder container
+        run: docker build -t archzfs-builder build-container
+      - name: Run builder container
+        run: docker run --privileged --rm -v "$(pwd):/src" archzfs-builder

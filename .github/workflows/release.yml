@@ -1,0 +1,50 @@
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: "4 2 * * *"
+
+name: Release
+
+concurrency:
+  group: release
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    environment: Release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build builder container
+        run: docker build -t archzfs-builder build-container
+      - name: Run builder container
+        env:
+          GPG_KEY_DATA: "${{ secrets.GPG_KEY_DATA }}"
+          GPG_KEY_ID: "${{ vars.GPG_KEY_ID }}"
+        run: docker run -e GPG_KEY_DATA -e GPG_KEY_ID --privileged --rm -v "$(pwd):/src" archzfs-builder
+      - name: Release mainline
+        uses: ncipollo/release-action@v1
+        with:
+          tag: latest
+          name: latest
+          commit: ${{ github.sha }}
+          artifacts: ./repo/*
+          removeArtifacts: true
+          replacesArtifacts: true
+          allowUpdates: true
+          omitBody: true
+          omitBodyDuringUpdate: true
+          artifactErrorsFailBuild: true
+      - uses: rickstaa/action-create-tag@v1
+        with:
+          tag: latest
+          force_push_tag: true

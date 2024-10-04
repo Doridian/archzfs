@@ -4,6 +4,7 @@
 *.log
 archiso/out/
 archiso/work/
+/repo
 
 # TEMPORARY
 packages/linux/*-headers/
