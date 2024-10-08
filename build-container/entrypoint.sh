@@ -15,6 +15,7 @@ set -x
 sudo chown -R buildbot:buildbot /src
 cd /src
 
+sed -i "/^THREADS=/s/9/$(nproc)/" ~/.config/clean-chroot-manager.conf
 sudo ccm64 d || true
 
 sudo bash build.sh -d -u all update
