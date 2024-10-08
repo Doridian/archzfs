@@ -13,9 +13,9 @@ mkdir -p "${OUTDIR}" "${TMPDIR}"
 # TODO: Update to use the upstream repository
 RELEASE_INFO="$(curl -s https://api.github.com/repos/Doridian/archzfs/releases/latest)"
 
-FILE_INFO="$(echo "${RELEASE_INFO}" | jq '.assets | map(.browser_download_url + "|" + .updated_at) | join("\n")' -r)"
+readarray -t FILE_INFO < <(echo "${RELEASE_INFO}" | jq '.assets | map(.browser_download_url + "|" + .updated_at) | join("\n")' -r)  
 
-for info in $FILE_INFO; do
+for info in "${FILE_INFO[@]}"; do
     url="${info%|*}"
     tmp_filename="${TMPDIR}/$(basename "${url}")"
     filename="${OUTDIR}/$(basename "${url}")"
