@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.1
       - name: Build builder container
         run: docker build -t archzfs-builder build-container
       - name: Run builder container

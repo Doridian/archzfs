@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.1
       - name: Build builder container
         run: docker build -t archzfs-builder build-container
       - name: Run builder container
@@ -30,7 +30,7 @@ jobs:
           GPG_KEY_ID: "${{ vars.GPG_KEY_ID }}"
         run: docker run -e GPG_KEY_DATA -e GPG_KEY_ID --privileged --rm -v "$(pwd):/src" archzfs-builder
       - name: Release mainline
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1.14.0
         with:
           name: latest
           tag: latest
@@ -41,7 +41,7 @@ jobs:
           omitBody: true
           omitBodyDuringUpdate: true
           removeArtifacts: true
-      - uses: rickstaa/action-create-tag@v1
+      - uses: rickstaa/action-create-tag@v1.7.2
         with:
           tag: latest
           force_push_tag: true
