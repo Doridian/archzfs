@@ -1,7 +1,11 @@
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-
+    paths:
+      - '**.sh'
+      - '.github/workflows/**'
+      - 'build-container/**'
+      - 'packages/**'
 name: Build
 
 permissions:
