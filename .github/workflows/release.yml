@@ -32,16 +32,15 @@ jobs:
       - name: Release mainline
         uses: ncipollo/release-action@v1
         with:
-          tag: latest
           name: latest
+          tag: latest
           commit: ${{ github.sha }}
           artifacts: ./repo/*
-          removeArtifacts: true
-          replacesArtifacts: true
           allowUpdates: true
+          artifactErrorsFailBuild: true
           omitBody: true
           omitBodyDuringUpdate: true
-          artifactErrorsFailBuild: true
+          removeArtifacts: true
       - uses: rickstaa/action-create-tag@v1
         with:
           tag: latest
