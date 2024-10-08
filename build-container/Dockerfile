@@ -27,8 +27,8 @@ RUN mkdir -p /tmp/ccm-install            && \
 
 USER root
 COPY ccm.conf /home/buildbot/.config/clean-chroot-manager.conf
-RUN chown buildbot:buildbot /home/buildbot/.config/clean-chroot-manager.conf && \
-    ccm64 p && \
+RUN ccm64 p && \
+    chown buildbot:buildbot /home/buildbot/.config/clean-chroot-manager.conf && \
     mkdir -p /scratch/.buildroot
 
 COPY entrypoint.sh /entrypoint.sh
