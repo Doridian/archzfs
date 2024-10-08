@@ -16,11 +16,11 @@ RELEASE_INFO="$(curl -s https://api.github.com/repos/Doridian/archzfs/releases/l
 FILE_INFO="$(echo "${RELEASE_INFO}" | jq '.assets | map(.browser_download_url + "|" + .updated_at) | join("\n")' -r)"
 
 for info in $FILE_INFO; do
-    url="$(echo "${info}" | cut -d'|' -f1)"
+    url="${info%|*}"
     tmp_filename="${TMPDIR}/$(basename "${url}")"
     filename="${OUTDIR}/$(basename "${url}")"
 
-    updated_at_str="$(echo "${info}" | cut -d'|' -f2)"
+    updated_at_str="${info#*|}"
     updated_at="$(date '+%s' --date "${updated_at_str}")"
     
     # Calculate old file modified time

@@ -6,7 +6,7 @@ if [ ! -z "${GPG_KEY_DATA-}" ]; then
         echo 'GPG_KEY_ID is not set, but GPG_KEY_DATA is set. Please set GPG_KEY_ID to the key ID of the key.'
         exit 1
     fi
-    echo "${GPG_KEY_DATA}" | gpg --import /dev/stdin
+    gpg --import /dev/stdin <<<"${GPG_KEY_DATA}"
 fi
 
 # Only set -x here so we can't accidently print the GPG key up there
@@ -15,7 +15,7 @@ set -x
 sudo chown -R buildbot:buildbot /src
 cd /src
 
-sed -i 's/jan/buildbot/' conf.sh && sudo ccm64 d || true
+sudo ccm64 d || true
 
 sudo bash build.sh -d -u all update
 
