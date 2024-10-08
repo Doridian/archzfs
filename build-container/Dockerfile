@@ -25,18 +25,16 @@ RUN mkdir -p /tmp/ccm-install            && \
     cd /tmp                              && \
     rm -rfv /tmp/ccm-install
 
-USER buildbot
-COPY ccm.conf /home/buildbot/.config/clean-chroot-manager.conf
-RUN sudo chown buildbot:buildbot /home/buildbot/.config/clean-chroot-manager.conf && \
-    sudo ccm64 p && \
-    sudo mkdir -p /scratch/.buildroot
-
-VOLUME /src
-
 USER root
+COPY ccm.conf /home/buildbot/.config/clean-chroot-manager.conf
+RUN chown buildbot:buildbot /home/buildbot/.config/clean-chroot-manager.conf && \
+    ccm64 p && \
+    mkdir -p /scratch/.buildroot
+
 COPY entrypoint.sh /entrypoint.sh
 COPY systemd-nspawn-wrapper /usr/local/bin/systemd-nspawn
 RUN systemd-machine-id-setup
 
 USER buildbot
+VOLUME /src
 ENTRYPOINT [ "/entrypoint.sh" ]
